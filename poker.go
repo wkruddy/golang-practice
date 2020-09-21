@@ -15,6 +15,22 @@ type suit []card
 
 var cardSet = []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}
 
+var nameMap = map[int]string{
+	1:  "Ace",
+	2:  "Two",
+	3:  "Three",
+	4:  "Four",
+	5:  "Five",
+	6:  "Six",
+	7:  "Seven",
+	8:  "Eight",
+	9:  "Nine",
+	10: "Ten",
+	11: "Jack",
+	12: "Queen",
+	13: "King",
+}
+
 func buildSuit(suitSymbol string) suit {
 	var cardSuit []card
 	for i := 0; len(cardSet)-1 >= i; i++ {
@@ -32,31 +48,19 @@ var (
 	spades   suit = buildSuit("♠")
 )
 
-var nameMap = map[int]string{
-	1:  "Ace",
-	2:  "Two",
-	3:  "Three",
-	4:  "Four",
-	5:  "Five",
-	6:  "Six",
-	7:  "Seven",
-	8:  "Eight",
-	9:  "Nine",
-	10: "Ten",
-	11: "Jack",
-	12: "Queen",
-	13: "King",
-}
-
 func buildDeck() []card {
+	// Build a fresn deck of ordered cards/suits
 	deck := hearts
-	deck = append(hearts, diamonds...)
+	deck = append(deck, diamonds...)
 	deck = append(deck, clubs...)
 	deck = append(deck, spades...)
 	return deck
 }
 
 func shuffleDeck(deck []card) []card {
+	// Instead of doing nested loops, I opted for something different to verify things were randomly pulled/shuffled into a new deck:
+	// For every card, get a random index of the 52, pull that card. If the card exists in the "already shuffled cards" map
+	// Recursively try again for another random card until it finds one that hasnt been used, then it adds it to the shuffled deck
 	var (
 		cardsRemaining  int = len(deck)
 		shuffledDeck    []card
@@ -111,10 +115,13 @@ func main() {
 
 	// Create the unshuffled deck
 	unshuffledDeck := buildDeck()
-	fmt.Println("Unshuffled Deck:", unshuffledDeck)
+	fmt.Println("Unshuffled Deck:")
+	fmt.Println(unshuffledDeck)
 
+	// Initially shuffle the deck
 	shuffledDeck := shuffleDeck(unshuffledDeck)
-	fmt.Println("Inintially Shuffled Deck:", shuffledDeck)
+	fmt.Println("Inintially Shuffled Deck:")
+	fmt.Println(shuffledDeck)
 
 	var cardsToReshuffleAfter []card
 
@@ -131,5 +138,8 @@ func main() {
 	// Take the cards that were pulled out and reshuffle them back into the deck a new
 	var deckToReshuffle []card = append(remainingDeck, cardsToReshuffleAfter...)
 	reshuffledDeck := shuffleDeck(deckToReshuffle)
-	fmt.Println("Newly Reshuffled Deck", reshuffledDeck)
+
+	// Show the reshuffled deck
+	fmt.Println("Newly Reshuffled Deck")
+	fmt.Println(reshuffledDeck)
 }
