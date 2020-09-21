@@ -6,12 +6,14 @@ import (
 	"time"
 )
 
-type card struct {
+// A Card has a symbol and a number
+type Card struct {
 	value  int
 	symbol string
 }
 
-type suit []card
+// A Suit is a list of cards
+type Suit []Card
 
 var cardSet = []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}
 
@@ -31,24 +33,24 @@ var nameMap = map[int]string{
 	13: "King",
 }
 
-func buildSuit(suitSymbol string) suit {
-	var cardSuit []card
+func buildSuit(suitSymbol string) Suit {
+	var cardSuit []Card
 	for i := 0; len(cardSet)-1 >= i; i++ {
 		cardValue := cardSet[i]
-		cardItem := card{value: cardValue, symbol: suitSymbol}
+		cardItem := Card{value: cardValue, symbol: suitSymbol}
 		cardSuit = append(cardSuit, cardItem)
 	}
 	return cardSuit
 }
 
 var (
-	hearts   suit = buildSuit("♡")
-	diamonds suit = buildSuit("♢")
-	clubs    suit = buildSuit("♣")
-	spades   suit = buildSuit("♠")
+	hearts   Suit = buildSuit("♡")
+	diamonds Suit = buildSuit("♢")
+	clubs    Suit = buildSuit("♣")
+	spades   Suit = buildSuit("♠")
 )
 
-func buildDeck() []card {
+func buildDeck() []Card {
 	// Build a fresn deck of ordered cards/suits
 	deck := hearts
 	deck = append(deck, diamonds...)
@@ -57,16 +59,16 @@ func buildDeck() []card {
 	return deck
 }
 
-func shuffleDeck(deck []card) []card {
+func shuffleDeck(deck []Card) []Card {
 	// Instead of doing nested loops, I opted for something different to verify things were randomly pulled/shuffled into a new deck:
 	// For every card, get a random index of the 52, pull that card. If the card exists in the "already shuffled cards" map
 	// Recursively try again for another random card until it finds one that hasnt been used, then it adds it to the shuffled deck
 	var (
 		cardsRemaining  int = len(deck)
-		shuffledDeck    []card
+		shuffledDeck    []Card
 		addShuffledCard func()
 	)
-	usedCards := make(map[string]card)
+	usedCards := make(map[string]Card)
 
 	addShuffledCard = func() {
 		cardIndexToPull := getRandomizedCardNum(len(deck))
@@ -98,7 +100,7 @@ func getRandomizedCardNum(maxVal int) (num int) {
 	return
 }
 
-func dealCard(shuffledDeck []card) (string, card, []card) {
+func dealCard(shuffledDeck []Card) (string, Card, []Card) {
 	card, remainingDeck := shuffledDeck[len(shuffledDeck)-1], shuffledDeck[:len(shuffledDeck)-1]
 
 	formattedCardNum := nameMap[card.value]
@@ -123,7 +125,7 @@ func main() {
 	fmt.Println("Inintially Shuffled Deck:")
 	fmt.Println(shuffledDeck)
 
-	var cardsToReshuffleAfter []card
+	var cardsToReshuffleAfter []Card
 
 	// Deal the first card
 	cardStr, dealtCard, remainingDeck := dealCard(shuffledDeck)
@@ -136,7 +138,7 @@ func main() {
 	fmt.Println(cardStr, "Remaining Cards:", len(remainingDeck))
 
 	// Take the cards that were pulled out and reshuffle them back into the deck a new
-	var deckToReshuffle []card = append(remainingDeck, cardsToReshuffleAfter...)
+	var deckToReshuffle []Card = append(remainingDeck, cardsToReshuffleAfter...)
 	reshuffledDeck := shuffleDeck(deckToReshuffle)
 
 	// Show the reshuffled deck
