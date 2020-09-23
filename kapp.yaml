@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: poker
+  labels:
+    name: poker
+spec:
+  containers:
+    - name: poker1
+      image: busybox
+      command: ["sh"]
+      args: ["docker", "build", "-t", "poker1", "-f", "Dockerfile", "./", ]
+      resources:
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      ports:
+        - containerPort: 80
+    - name: poker2
+      image: busybox
+      command: ["sh"]
+      args: ["docker", "build", "-t", "poker2", "-f", "Dockerfile", "./", ]
+      resources:
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      ports:
+        - containerPort: 80
