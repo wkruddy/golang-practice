@@ -4,12 +4,7 @@
 ### Run it
 
 ```
-go run poker.go
+Terminal Window 1: go run server/pokerServer.go
+Terminal Window 2: go run simulation/simulateGames.go
 ```
 
-### Docker
-
-```
-docker build -t poker -f Dockerfile ./
-docker run poker
-```
